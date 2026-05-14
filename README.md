@@ -252,7 +252,7 @@ cat logs/agent_run_20250115.jsonl | jq 'select(.event == "transition") | {from: 
 
 **Why `Annotated[List, operator.add]`?** LangGraph merges node outputs into the state. For list fields we want *accumulation*, not *replacement*. The reducer ensures research notes from multiple subtasks are never lost.
 
-**Why not async?** Tavily's Python client is synchronous. Adding async complexity for a CLI tool is premature, so upgrade to `AsyncTavilyClient` + async nodes if you need concurrent subtask execution.
+**Why not async?** Tavily's Python client is synchronous. Adding async complexity for a CLI tool is too much, so upgrade to `AsyncTavilyClient` + async nodes if you need concurrent subtask execution.
 
 ---
 
