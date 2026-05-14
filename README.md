@@ -266,7 +266,7 @@ cat logs/agent_run_20250115.jsonl | jq 'select(.event == "transition") | {from: 
 2. Register it: `builder.add_node("fact_check", fact_check_node)` in `graph.py`.
 3. Rewire edges: `validate → fact_check → synthesize`.
 
-**Parallel subtask research** - use LangGraph's `Send` API to fan out subtasks concurrently.
+**Parallel subtask research** - use LangGraph's `Send` API to run subtasks concurrently.
 
 ---
 
