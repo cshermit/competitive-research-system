@@ -45,7 +45,7 @@ If the Researcher returns empty or thin results (< 150 characters), the **Planne
 
 1. It invokes the LLM to **revise the search query** with different keywords or angle.
 2. Routes back to the Researcher for a retry.
-3. After `MAX_RETRIES_PER_SUBTASK` failed attempts, the subtask is marked `failed` and skipped — the Synthesizer works with whatever data was collected.
+3. After `MAX_RETRIES_PER_SUBTASK` failed attempts, the subtask is marked `failed` and skipped - the Synthesizer works with whatever data was collected.
 
 This prevents error compounding, the #1 failure mode in naive agent pipelines.
 
@@ -194,7 +194,7 @@ The `ResearchState` TypedDict is the single source of truth. Key fields:
 | `final_report`           | `Optional[str]`         | Markdown report (set by the Synthesizer)        |
 | `status`                 | `str`                   | `planning → researching → synthesizing → complete` |
 
-List fields use `Annotated[List[...], operator.add]` — LangGraph's reducer ensures safe accumulation across nodes without race conditions.
+List fields use `Annotated[List[...], operator.add]` - LangGraph's reducer ensures safe accumulation across nodes without race conditions.
 
 ---
 
@@ -248,17 +248,17 @@ cat logs/agent_run_20250115.jsonl | jq 'select(.event == "transition") | {from: 
 
 **Why LangGraph?** Explicit state machines make control flow visible and debuggable. Compared to ReAct-style agents, every transition is logged and deterministic.
 
-**Why a separate Validator node?** The Planner is the "control plane" — it owns the decision of whether to retry, move on, or synthesize. Keeping this logic separate from the Researcher prevents the Researcher from needing to know about retries.
+**Why a separate Validator node?** The Planner is the "control plane", thus it owns the decision of whether to retry, move on, or synthesize. Keeping this logic separate from the Researcher prevents the Researcher from needing to know about retries.
 
 **Why `Annotated[List, operator.add]`?** LangGraph merges node outputs into the state. For list fields we want *accumulation*, not *replacement*. The reducer ensures research notes from multiple subtasks are never lost.
 
-**Why not async?** Tavily's Python client is synchronous. Adding async complexity for a CLI tool is premature — upgrade to `AsyncTavilyClient` + async nodes if you need concurrent subtask execution.
+**Why not async?** Tavily's Python client is synchronous. Adding async complexity for a CLI tool is premature, so upgrade to `AsyncTavilyClient` + async nodes if you need concurrent subtask execution.
 
 ---
 
 ## Extending the system
 
-**Add a new tool** — create `src/tools/my_tool.py` and import it in `researcher.py`.
+**Add a new tool** - create `src/tools/my_tool.py` and import it in `researcher.py`.
 
 **Add a new agent** (e.g. a Fact-Checker between Researcher and Synthesizer):
 
@@ -266,7 +266,7 @@ cat logs/agent_run_20250115.jsonl | jq 'select(.event == "transition") | {from: 
 2. Register it: `builder.add_node("fact_check", fact_check_node)` in `graph.py`.
 3. Rewire edges: `validate → fact_check → synthesize`.
 
-**Parallel subtask research** — use LangGraph's `Send` API to fan out subtasks concurrently.
+**Parallel subtask research** - use LangGraph's `Send` API to fan out subtasks concurrently.
 
 ---
 
